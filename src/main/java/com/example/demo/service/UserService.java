@@ -21,7 +21,6 @@ public class UserService {
             throw new IllegalArgumentException("Username already exists");
         }
         User user = UserMapper.toEntity(userDto);
-        System.out.println("Before save: " + user);  // 🔍 בדיקה
         return userRepo.save(user);
     }
 

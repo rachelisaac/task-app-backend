@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.jwt.JwtUtil;
 import com.example.demo.dto.UserDto;
 import com.example.demo.entities.User;
 import com.example.demo.service.UserService;
@@ -17,6 +18,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     // רישום משתמש חדש
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody UserDto userDto) {
@@ -25,11 +29,19 @@ public class UserController {
     }
 
     // אימות משתמש
+//    @PostMapping("/login")
+//    public ResponseEntity<User> authenticateUser(@RequestBody UserDto userDto) {
+//        User authenticatedUser = userService.authenticateUser(userDto);
+//        return ResponseEntity.ok(authenticatedUser);
+//    }
+
     @PostMapping("/login")
-    public ResponseEntity<User> authenticateUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> authenticateUser(@RequestBody UserDto userDto) {
         User authenticatedUser = userService.authenticateUser(userDto);
-        return ResponseEntity.ok(authenticatedUser);
+        String token = jwtUtil.generateToken(authenticatedUser);  // הנפקת הטוקן
+        return ResponseEntity.ok(token);
     }
+
 
     // החזרת פרטי משתמש לפי שם משתמש
     @GetMapping("/{username}")
